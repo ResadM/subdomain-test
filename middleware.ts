@@ -1,10 +1,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import subdomains from './subdomains';
+//import subdomains from './subdomains';
 
 
 
-
+const subdomains = [{ subdomain: "test1" }, { subdomain: "test2" }];
 export const config = {
   matcher: [
     "/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
@@ -13,8 +13,8 @@ export const config = {
 export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
   console.log("URL:" + url);
-  let hostname = req.headers.get("host");
-  hostname = hostname!.replace("www.", "");
+  const hostname = req.headers.get("host");
+  console.log("Hostname:" + hostname); 
 
 
   // Define allowed Domains (localhost and production domain)
@@ -22,7 +22,6 @@ export default async function middleware(req: NextRequest) {
   
   // Verify if hostname exist in allowed domains
   const isAllowedDomain = allowedDomains.some(domain => hostname!.includes(domain));
-
  
   // Extract the possible subdomain in the URL
   const subdomain = hostname!.split('.')[0];
@@ -31,7 +30,7 @@ export default async function middleware(req: NextRequest) {
   
   // If we stay in a allowed domain and its not a subdomain, allow the request.
   if (isAllowedDomain && !subdomains.some(d => d.subdomain === subdomain)) {
-    return NextResponse.next();
+   return NextResponse.next();
   }
 
   const subdomainData = subdomains.find(d => d.subdomain === subdomain);
@@ -41,6 +40,6 @@ export default async function middleware(req: NextRequest) {
     
     return NextResponse.rewrite(new URL(`/${subdomain}${url.pathname}`, req.url));
   }
-
-  return new Response(null, { status: 404 });
+ return NextResponse.next();
+  //return new Response(null, { status: 404 });
 }
