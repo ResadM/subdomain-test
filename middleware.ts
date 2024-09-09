@@ -12,7 +12,8 @@ export const config = {
 };
 export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
-  const hostname = req.headers.get("host");
+  let hostname = req.headers.get("host");
+  hostname = hostname!.replace("www.", "");
 
 
   // Define allowed Domains (localhost and production domain)
@@ -24,6 +25,7 @@ export default async function middleware(req: NextRequest) {
  
   // Extract the possible subdomain in the URL
   const subdomain = hostname!.split('.')[0];
+  console.log(subdomain);
 
   
   // If we stay in a allowed domain and its not a subdomain, allow the request.
