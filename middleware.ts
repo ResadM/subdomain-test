@@ -12,6 +12,7 @@ export const config = {
 };
 export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
+  console.log("URL:" + url);
   let hostname = req.headers.get("host");
   hostname = hostname!.replace("www.", "");
 
