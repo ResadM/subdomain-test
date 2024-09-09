@@ -16,7 +16,7 @@ export default async function middleware(req: NextRequest) {
 
 
   // Define allowed Domains (localhost and production domain)
-  const allowedDomains = ["localhost:3000"];
+  const allowedDomains = ["localhost:3000","rasadmammadov.com"];
   
   // Verify if hostname exist in allowed domains
   const isAllowedDomain = allowedDomains.some(domain => hostname!.includes(domain));
